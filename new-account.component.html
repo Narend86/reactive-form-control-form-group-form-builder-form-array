@@ -1,0 +1,112 @@
+<div class="inspection_content_sec newUser newCompany">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-12 text-center">
+                <h4 class="h4_title">Add a New Account</h4>
+            </div>
+        </div>
+        <div class="quote_form">
+            <div class="addQuote_form">
+                <div class="cst_tab_content">
+                    <div class="profile_img_block">
+                        <div class="circle_img user-pic">
+                            <input #file type="file" id="imgupload1" style="display:none;" />
+                            <div class="user-profile-pic"><img id="preview1" src="../../../../assets/images/user.jpg"
+                                    alt="user"></div>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                    <form [formGroup]="newAccountForm" (ngSubmit)="submitForm()" class="form_content">
+                        <div class="row">
+                            <div class="col-md-6">
+                                    <mat-form-field appearance="outline" class="full-width">
+                                        <mat-label class="outline_label">Account Name</mat-label>
+                                        <input matInput placeholder="Account Name" formControlName="name">
+
+                                    </mat-form-field>
+                            </div>
+                            <div class="col-md-6">
+                                <mat-form-field appearance="outline" class="full-width">
+                                    <mat-label class="outline_label">Account Number</mat-label>
+                                    <input matInput placeholder="Account Number" formControlName="account_number"
+                                        autocomplete="off">
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div formGroupName="address_attributes">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <mat-form-field appearance="outline" class="full-width">
+                                        <mat-label class="outline_label">Street Address</mat-label>
+                                        <input ngx-google-places-autocomplete 
+                                               [options]='options' 
+                                               #placesRef="ngx-places" 
+                                               (onAddressChange)="handleAddressChange($event)" 
+                                               matInput 
+                                               placeholder="Add Address" formControlName="street"
+                                               autocomplete="off">
+                                    </mat-form-field>
+
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <mat-form-field appearance="outline" class="full-width">
+                                        <mat-label class="outline_label">City</mat-label>
+                                        <input matInput placeholder="City" formControlName="city"
+                                            autocomplete="off">
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-4">
+                                    <mat-form-field appearance="outline" class="full-width">
+                                        <mat-label class="outline_label">State</mat-label>
+                                        <input matInput placeholder="State" formControlName="state"
+                                            autocomplete="off">
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-4">
+                                    <mat-form-field appearance="outline" class="full-width">
+                                        <mat-label class="outline_label">Country</mat-label>
+                                        <input matInput placeholder="Country" formControlName="country"
+                                            autocomplete="off">
+                                    </mat-form-field>
+
+                                </div>
+                            </div>
+                            <div class="row cst_row">
+                                <div class="col-md-4 cst_col">
+                                    <mat-form-field appearance="outline" [floatLabel]="'auto'" class="full-width">
+                                        <mat-label class="outline_label">Zip</mat-label>
+                                        <input matInput placeholder="Zip" formControlName="zip"
+                                            autocomplete="off">
+                                    </mat-form-field>
+                                </div>
+                    
+                            </div>
+                        </div>
+                      
+                            <div class="form-group cst_form_w">
+                                <mat-form-field appearance="outline" [floatLabel]="'auto'" class="full-width region-block">
+
+                                    <mat-label class="outline_label">Region</mat-label>
+                                    <mat-select formControlName="region">
+                                        <!-- <mat-option>--</mat-option> -->
+                                        <mat-option *ngFor="let region of regions" [value]="region.id">
+                                            {{region.name}}
+                                        </mat-option>
+                                    </mat-select>
+
+                                </mat-form-field>
+                            </div>
+                        
+                        <div class="modal-footer">
+                                <button type="submit" [disabled]="newAccountForm.invalid" class="btn btn_danger cst_btn">Submit</button>
+                                <button type="button" (click)="close('false')" class="btn btn-dark cst_btn">Cancel</button>
+                            </div>
+                    </form>
+                </div>
+            
+            </div>
+        </div>
+    </div>
+</div>

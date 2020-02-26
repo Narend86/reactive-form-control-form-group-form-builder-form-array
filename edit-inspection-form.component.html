@@ -1,0 +1,167 @@
+<section class="app-content inspection_form">
+    <section class="edit_inspection">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card edit_ins_content">
+                    <div class="card_header d_flex">
+                        <h5 class="sm_title">Edit Inspection Form</h5>
+                    </div>
+                    <form [formGroup]="inspectionForm" (ngSubmit)="onSubmitForm()">
+                        <div class="card-body inner_card">
+                            <div class="form_info">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="form_title">Name</label>
+                                            <input formControlName="inspection_form"
+                                                class="form-control input_modifier input-modifier"
+                                                [ngClass]="{ 'is-invalid': submitted && f.inspection_form.errors }">
+                                            <div *ngIf="submitted && f.inspection_form.errors" class="invalid-feedback">
+                                                <mat-error *ngIf="f.inspection_form.hasError('required')">required
+                                                </mat-error>
+                                            </div>
+                                        </div>
+                                        <div class="checkbox_block radius_checkbox">
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" class="custom-control-input" id="customCheck1"
+                                                    formControlName="private">
+                                                <label class="custom-control-label" for="customCheck1"><span><img
+                                                            src="../../assets/images/icons/icn_lock_lg.png"></span>
+                                                    Private - If checked, this inspection and results will ONLY be
+                                                    visible to users with private inspection permissions.</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form_title">Available to</label>
+                                        <mat-form-field class="example-chip-list cst_multiSelect">
+                                            <mat-label>Select...</mat-label>
+                                            <mat-select formControlName="account_ids" multiple>
+                                                <mat-select-trigger>
+                                                    <mat-chip-list>
+                                                        <mat-chip
+                                                            *ngFor="let account of inspectionForm.controls['account_ids'].value"
+                                                            [removable]="true" (removed)="onToppingRemoved(account)">
+                                                            {{ account.name }}
+                                                            <mat-icon matChipRemove>cancel</mat-icon>
+                                                        </mat-chip>
+                                                    </mat-chip-list>
+                                                </mat-select-trigger>
+                                                <!-- <mat-option *ngFor="let topping of toppingList"
+                                                     [value]="topping">{{topping}}</mat-option> [disabled]="group.disabled" [label]="group.name" -->
+                                                <!-- <mat-optgroup *ngFor="let group of pokemonGroups" 
+                                                    > -->
+                                                <mat-option *ngFor="let pokemon of pokemonGroups" [value]="pokemon">
+                                                    {{pokemon.name}}
+                                                </mat-option>
+                                                <!-- </mat-optgroup> -->
+                                            </mat-select>
+                                        </mat-form-field>
+                                        <!-- {{ inspectionForm.controls['account_ids'].value | json }} -->
+                                        <label class="cst_label">This inspection form is available to be used in other
+                                            sites within your account.</label>
+                                    </div>
+                                </div>
+                                <div class="btn_block">
+                                    <button type="button" class="btn cst_btn btn_danger_outline" (click)="addItem()">ADD
+                                        SECTION</button>
+                                    <span class="weight_icn">Weight<img
+                                            src="../../assets/images/icons/icn_info_danger.png" class="ml-1"></span>
+                                </div>
+                            </div>
+                            <div class="card rating_form_card edit_info_form" formArrayName="sections_attributes"
+                                *ngFor="let item of inspectionForm.get('sections_attributes').controls; let i = index;">
+                                <div class="card-body rating_card_body ">
+                                    <ng-container [formGroupName]="i">
+                                        <div class="ins_form_btn">
+                                            <input formControlName="name"
+                                                class="form-control input-modifier input-modifier1"
+                                                placeholder="enter a section name here"
+                                                [ngClass]="{ 'is-invalid': submitted && item.controls.name.errors }">
+                                            <div *ngIf="submitted && item.controls.name.errors"
+                                                class="invalid-feedback">
+                                                <mat-error *ngIf="item.controls.name.hasError('required')">
+                                                    required</mat-error>
+                                            </div>
+                                        </div>
+                                        <div class="contact_info rating_info">
+                                            <ng-container formArrayName="line_items_attributes"
+                                                *ngFor="let option of getAttribute(item); let j = index;">
+                                                <ng-container [formGroupName]="j">
+                                                    <div class="row">
+                                                        <div class="col-sm-4 col-md-4 col-lg-4 col-xl-5 gutter">
+                                                            <div class="form-group">
+                                                                <input formControlName="name"
+                                                                    class="form-control input-modifier"
+                                                                    aria-describedby="emailHelp" placeholder="line item name"
+                                                                    [ngClass]="{ 'is-invalid': submitted && option.controls.name.errors }">
+                                                                    <div *ngIf="submitted && option.controls.name.errors"
+                                                                    class="invalid-feedback">
+                                                                    <mat-error *ngIf="option.controls.name.hasError('required')">
+                                                                        required</mat-error>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-4 col-md-4 col-lg-3 col-xl-3 gutter">
+                                                            <div class="form-group">
+                                                                <mat-form-field class="example-chip-list cst_multiSelect invalid-dropdown" >
+                                                                    <mat-label>Select...</mat-label>
+                                                                    <div [ngClass]="submitted && option.controls.rating_type_id.errors ? 'invalid':''">
+                                                                        <mat-select formControlName="rating_type_id" >
+                                                                            <mat-option
+                                                                                *ngFor="let rate of getRattingArray"
+                                                                                [value]="rate.id">
+                                                                                {{rate.name}}
+                                                                            </mat-option>
+                                                                        </mat-select>
+                                                                    </div>
+                                                              
+                                                                </mat-form-field>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-2 col-md-2 col-lg-3 col-xl-3 gutter">
+                                                            <div class="form-group">
+                                                                <input formControlName="weight"
+                                                                    class="form-control input-modifier" placeholder="0" (keypress)="ValidateText($event)">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-2 col-md-2 col-lg-2 col-xl-1 gutter">
+                                                            <div class="card delete_icn">
+                                                                <div class="card-body text-center icn_block">
+                                                                    <a href="javascript:void(0)"
+                                                                        (click)="removeNestedItem(i,j)">
+                                                                        <i class="fa fa-trash cst_icon mr-2"></i>
+                                                                    </a>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </ng-container>
+
+                                            </ng-container>
+                                            <div class="card_footer">
+                                                <div class="btn_block text-center">
+                                                    <button type="button" class="btn cst_btn btn_danger_outline mr-2"
+                                                        (click)="addNestedItem(i)">ADD A SUB SECTION</button>
+                                                    <button type="button" class="btn cst_btn btn_secondary_outline"
+                                                        (click)="removeItem(i)">DELETE SECTION</button>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </ng-container>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card_footer">
+                            <div class="btn_block text-center">
+                                <button type="submit" class="btn cst_btn btn_danger mr-2">save</button>
+                                <button type="button" class="btn cst_btn btn-dark">Cancel</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+</section>

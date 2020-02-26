@@ -1,0 +1,240 @@
+<div class="rating-wrapper">
+<mat-tab-group>
+
+    <mat-tab label="Percentage"> 
+       <a class="nav-link active" id="percentage-tab" data-toggle="tab" href="#percentage" role="tab" aria-controls="percentage" aria-selected="true"></a>
+                      <!--percentage tab content-->
+                      <div class="tab-pane fade show active percentage_tab" id="percentage" role="tabpanel" aria-labelledby="percentage-tab">
+                        <div class="card setting_form_con edit_rating">
+                            <div class="card_header d_flex">
+                                <h5 class="sm_title">New Rating</h5>
+                            </div>
+                            <div class="card-body inner_card">
+                             <form [formGroup]="ratingForm" >
+                                <div class="form_info">
+                                    
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label class="form_title lable_modifier">Name this percentage rating</label>
+                                                    <input class="form-control input-modifier"
+                                                           placeholder="Ratings Name" 
+                                                           formControlName="rating_type"
+                                                           [ngClass]="{ 'is-invalid': submitted && f.rating_type.errors }"
+                                                            required>
+                                                            <div *ngIf="submitted && f.rating_type.errors" class="invalid-feedback">
+                                                                <mat-error *ngIf="f.rating_type.hasError('required')">required</mat-error>
+                                                            </div>
+                                                    <small id="emailHelp" class="form-text">e.g. 1-3 Rating, Pass/Fail, Clean/Dirty</small>
+                                               
+                                                </div>
+                                            </div>
+                                         
+                                        </div>
+                                
+                                </div>
+                                <label class="lable_modifier">Rating Choice</label>
+                                <hr class="cst_hr">
+                                <h5 class="small_tile">Inspectors will rate line item based on the selections below </h5>
+                                <div class="card rating_form_card edit_info_form mb-0">
+                                    <div class="card-body rating_card_body">
+                                        <div class="contact_info rating_info">
+                                            <!-- <form> -->
+                                            <div formArrayName="rating_options_attributes" *ngFor="let item of ratingForm.get('rating_options_attributes').controls; let i = index;">
+                                                <ng-container [formGroupName]="i">
+                                                <div class="row">
+                                                    <div class="col-sm-6 col-md-6 col-lg-4 col-xl-4 gutter">
+                                                        <div class="form-group">
+                                                            <label class="lable_modifier">Line Item</label>
+                                                            <input formControlName="name" 
+                                                                   class="form-control input-modifier"
+                                                                   [ngClass]="{ 'is-invalid': submitted && item.controls.name.errors }"
+                                                                   placeholder="Label Name" required>
+                                                            <div *ngIf="submitted && item.controls.name.errors" class="invalid-feedback">
+                                                                <mat-error *ngIf="item.controls.name.hasError('required')">required</mat-error>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-6 col-md-6 col-lg-2 col-xl-3 gutter">
+                                                        <div class="form-group">
+                                                            <label class="lable_modifier">Percent</label>
+                                                            <input formControlName="value" 
+                                                                   class="form-control input-modifier"
+                                                                   [ngClass]="{ 'is-invalid': submitted && item.controls.value.errors }"
+                                                                   placeholder="eg. 50" (keypress)="ValidateText($event)">
+                                                            <div *ngIf="submitted && item.controls.value.errors" class="invalid-feedback">
+                                                                <mat-error *ngIf="item.controls.value.hasError('required')">required</mat-error>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-4 col-md-4 col-lg-2 col-xl-2 gutter">
+                                                        <label class="lable_modifier">Deficient</label>
+                                                        <div class="card">
+                                                            <div class="card-body icn_block pt-0">
+                                                                <div class="checkbox_block radius_checkbox">
+                                                                    <div class="custom-control custom-checkbox">
+                                                                        <input formControlName="deficient" type="checkbox" class="custom-control-input" id="customCheck+{{i}}">
+                                                                        <label class="custom-control-label" for="customCheck+{{i}}"></label>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-4 col-md-4 col-lg-2 col-xl-2 gutter">
+                                                        <div class="form-group">
+                                                            <label class="lable_modifier">Default</label>
+                                                            <div class="card">
+                                                                <div class="card-body icn_block pt-0">
+                                                                    <div class="custom-control custom-radio cst_radio_btn">
+                                                                        <input formControlName="default" 
+                                                                               [value]="dValue" type="radio"
+                                                                               id="customRadio+{{i}}"
+                                                                               (focus)="onRadioClick(i,$event)"
+                                                                               name="default" class="custom-control-input"
+                                                                               >
+                                                                        <label class="custom-control-label" for="customRadio+{{i}}"></label>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-4 col-md-4 col-lg-2 col-xl-1 gutter">
+                                                        <label class="lable_modifier mb_none">&nbsp;</label>
+                                                        <div class="card">
+                                                            <div class="card-body text-left icn_block">
+                                                                <a href="javascript:void(0)" (click)="removeItem(i)"><i class="fa fa-trash cst_icon mr-2"></i></a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                       
+                                            </ng-container>
+                                            </div>
+                                            <!-- </form> -->
+                                        </div>
+                                    </div>
+                                    <div class="card_footer">
+                                        <div class="btn_block text-center">
+                                            <button class="btn cst_btn btn_danger_outline mr-2" (click)="addItem()">ADD ANOTHER ROW</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                </form>
+                            </div>
+                            <div class="card_footer">
+                                <div class="btn_block text-center">
+                                    <button (click)="onSubmit()" type="submit" class="btn cst_btn btn_danger mr-2">save</button>
+                                    <button class="btn cst_btn btn-outline-secondary  cancel_btnnew">Cancel</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- // percentage tab content-->
+    </mat-tab>
+    <mat-tab label="List">
+        <div class="card setting_form_con edit_rating">
+            <div class="card_header d_flex">
+                <h5 class="sm_title">New Rating</h5>
+            </div>
+            <div class="card-body inner_card">
+                <form [formGroup]="ratingListForm" (ngSubmit)="onListSubmit()">                
+                    <div class="form_info">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <p class="cst_para">Lists provide your inspectors with customized choices to pick from that won't effect the inspection score. For example, you can create a list of employee names to later run reports for inspections of those user's areas.</p>
+                                <div class="form-group cst_form_group">
+                                    <label class="form_title lable_modifier">Title</label>
+                                    <input formControlName="rating_type" 
+                                           class="form-control input-modifier"
+                                           [ngClass]="{ 'is-invalid': rSubmitted && rf.rating_type.errors }"
+                                           placeholder="Name of list">
+                                           <div *ngIf="rSubmitted && rf.rating_type.errors" class="invalid-feedback">
+                                            <mat-error *ngIf="rf.rating_type.hasError('required')">required</mat-error>
+                                        </div>
+                                    <small id="" class="form-text">e.g. Employee Names, corrective actions, room numbers.</small>
+                                </div>
+                                <div class="form-group cst_form_group">
+                                    <label class="form_title lable_modifier">Inspectors can pick</label>
+                                    <select class="custom-select input-modifier select_modifier" formControlName="choice">
+                                        <option value="">select</option>
+                                        <option value="single">Only One Choice</option>
+                                        <option value="multiple">Muliple Choices</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                </div>
+                <label class="lable_modifier">List Choices</label>
+                <hr class="cst_hr">
+                <div class="card rating_form_card edit_info_form mb-0">
+                    <div class="card-body rating_card_body">
+                        <div class="contact_info rating_info">
+                            <div class="form-group rating_form_group" formArrayName="attributes" *ngFor="let item of ratingListForm.get('attributes').controls; let i = index;">
+                                <ng-container [formGroupName]="i">
+                                <div class="input-group">
+                                    <input type="text" 
+                                           class="form-control input-modifier" 
+                                           placeholder="Choice name"
+                                           formControlName="name"
+                                           [ngClass]="{ 'is-invalid': rSubmitted && item.controls.name.errors }"
+                                           >
+                                        <div *ngIf="rSubmitted && item.controls.name.errors" class="invalid-feedback">
+                                            <mat-error *ngIf="item.controls.name.hasError('required')">required</mat-error>
+                                        </div>
+                                </div>
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text" >
+                                        <div class="dropdown cst_dropdown" (click)="removeRatingItem(i)">
+                                            <i class="fa fa-trash cst_icon" ></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                </ng-container>
+                            </div>
+                        </div>
+                        <div class="card_footer"><div class="btn_block text-center">
+                            <button type="button" (click)="addRatingItem()" class="btn cst_btn btn_danger_outline mr-2">ADD ANOTHER ROW</button>
+                        </div>
+                    </div>
+                    </div>
+                 </div>
+                 <div class="card_footer">
+                    <div class="btn_block text-center">
+                        <button type="submit" class="btn cst_btn btn_danger mr-2">save</button>
+                        <button type="button" class="btn cst_btn btn-outline-secondary  cancel_btnnew">Cancel</button>
+                    </div>
+                </div>
+                </form>
+            </div>
+   
+        </div>
+    </mat-tab>
+ 
+  </mat-tab-group>
+</div>
+<!-- <main class="app-content edit_inspection rating_con">
+    <div class="rating_tab_header">
+        <ul class="nav nav-tabs rating_tabs" id="myTab" role="tablist">
+            <li class="nav-item">
+             
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="list-tab" data-toggle="tab" href="#list" role="tab" aria-controls="list" aria-selected="false">List</a>
+            </li>
+        </ul>
+    </div>
+    <section class="appcontent_Inner rating_inner">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="tab-content" id="myTabContent">
+     
+
+                    <div class="tab-pane fade list_tab_content" id="list" role="tabpanel" aria-labelledby="list-tab">
+              
+                    </div>
+                  
+                </div>
+            </div>
+        </div>
+    </section>
+</main> -->
